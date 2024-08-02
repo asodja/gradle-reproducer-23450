@@ -1,0 +1,6 @@
+.idea
+.kotlin
+gradle-user-home
+kotlin-user-home
+build/
+.gradle/

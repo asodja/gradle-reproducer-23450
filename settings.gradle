@@ -1,0 +1,64 @@
+
+pluginManagement {
+    apply from: 'gradle/cache-redirector.settings.gradle.kts'
+
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+    }
+
+    plugins {
+        id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+        id "org.jetbrains.kotlin.kapt" version "$kotlin_version"
+        id "org.jetbrains.kotlin.android" version "$kotlin_version"
+        id "org.jetbrains.kotlin.js" version "$kotlin_version"
+        id "org.jetbrains.kotlin.native.cocoapods" version "$kotlin_version"
+        id "org.jetbrains.kotlin.multiplatform" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.allopen" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.spring" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.jpa" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.noarg" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.lombok" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.power-assert" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.sam.with.receiver" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.serialization" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.assignment" version "$kotlin_version"
+        id "org.jetbrains.kotlin.gradle-subplugin-example" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.atomicfu" version "$kotlin_version"
+        id "org.jetbrains.kotlin.plugin.compose" version "$kotlin_version"
+    }
+    
+    resolutionStrategy {
+        eachPlugin {
+            switch (requested.id.id) {
+                case "com.android.application":
+                case "com.android.library":
+                case "com.android.test":
+                case "com.android.dynamic-feature":
+                case "com.android.asset-pack":
+                case "com.android.asset-pack-bundle":
+                case "com.android.lint":
+                case "com.android.instantapp":
+                case "com.android.feature":
+                    useModule("com.android.tools.build:gradle:$android_tools_version")
+                    break
+            }
+        }
+    }
+}
+
+include ':script-template', ':app'
+
+
+dependencyResolutionManagement {
+    
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/"
+        }
+    }
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+}
