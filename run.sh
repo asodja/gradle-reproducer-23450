@@ -1,12 +1,21 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-#rm -rf "./gradle-user-home/caches/8.9/transforms"
-for i in {1..100}
+KOTLIN_USER_HOME="$(pwd)/kotlin-user-home"
+GRADLE_USER_HOME="$(pwd)/gradle-user-home"
+
+trap printout SIGINT
+
+count=0
+printout() {
+    echo -e "\nFinished with $count iterations"
+    exit 0
+}
+
+while true;
 do
-  echo "\nIteration $i"
+  count=$((count+1))
+  echo -e "\nIteration $count"
   find ./gradle-user-home/caches -type d -name "transforms" -exec rm -r {} \;
-  KOTLIN_USER_HOME="$(pwd)/kotlin-user-home"
-  GRADLE_USER_HOME="$(pwd)/gradle-user-home"
   ./gradlew --info -Pkotlin_version=2.0.20-RC -Dorg.gradle.unsafe.configuration-cache=false \
     -Dorg.gradle.unsafe.configuration-cache-problems=fail -Dorg.gradle.unsafe.isolated-projects=false --parallel \
     --max-workers=3 -Pkotlin.incremental=false --watch-fs --no-build-cache -Pkotlin.native.cacheKind=none \
@@ -18,4 +27,4 @@ do
     --gradle-user-home="$GRADLE_USER_HOME" \
     --no-daemon \
     -Pkotlin.internal.compiler.arguments.log.level=info $@
-  done
+done
